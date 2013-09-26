@@ -160,8 +160,7 @@ command-line or ESC to discard edits and return to the GRUB menu."),
     }
   else
     {
-      const char *msg = _("Use the %C and %C keys to select which "
-			  "entry is highlighted.");
+      const char *msg = _("");
       char *msg_translated;
 
       msg_translated = grub_xasprintf (msg, GRUB_UNICODE_UPARROW,

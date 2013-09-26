@@ -25,6 +25,12 @@
 #include <grub/dl.h>
 #include <grub/extcmd.h>
 #include <grub/i18n.h>
+#include <grub/i386/io.h>
+#include <grub/time.h>
+
+#define GPIOBASE 0x500  // GPIO_BASE
+#define GPIOUSESEL 0x504  // GPIO_USE_SEL
+#define GPIOIOSEL 0x50C // GP_IO_SEL
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
@@ -33,8 +39,21 @@ grub_cmd_hello (grub_extcmd_context_t ctxt __attribute__ ((unused)),
 		int argc __attribute__ ((unused)),
 		char **args __attribute__ ((unused)))
 {
-  grub_printf ("%s\n", _("Hello World"));
-  return 0;
+  grub_outb(grub_inb(GPIOBASE) | 0x80, GPIOBASE);     // Read IO 0x500 and set bit 7 to “1” (Enabled GPIO function)
+  grub_outb(grub_inb(GPIOUSESEL) | 0x80, GPIOUSESEL); // Read IO 0x504 and set bit 7 to “0” (GPIO act as GPI)
+  
+  grub_millisleep(300);
+
+  // Read RESET Bit now
+  int status = grub_inb(GPIOIOSEL);
+  if ((status & 0x80) == 0) {
+      grub_printf ("%s\n", _("on"));
+      return 0;
+  }
+  else {
+      grub_printf ("%s\n", _("off"));
+      return 1;
+  }
 }
 
 static grub_extcmd_t cmd;

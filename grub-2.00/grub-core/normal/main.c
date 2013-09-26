@@ -226,14 +226,23 @@ grub_normal_init_page (struct grub_term_output *term)
 {
   grub_ssize_t msg_len;
   int posx;
-  const char *msg = _("GNU GRUB  version %s");
+
+  //terence++ change to recovery menu title
+  //const char *msg = _("GNU GRUB  version %s");
+  const char *msg = _("Recovery v%s");
+  //++terence changte to recovery menu title
+
   char *msg_formatted;
   grub_uint32_t *unicode_msg;
   grub_uint32_t *last_position;
  
   grub_term_cls (term);
 
-  msg_formatted = grub_xasprintf (msg, PACKAGE_VERSION);
+  //terence++ change to recovery menu title
+  //msg_formatted = grub_xasprintf (msg, PACKAGE_VERSION);
+  msg_formatted = grub_xasprintf (msg, "2.0");
+  //++terence changte to recovery menu title
+
   if (!msg_formatted)
     return;
  
